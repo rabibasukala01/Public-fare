@@ -22,4 +22,5 @@ urlpatterns = [
     path('auth/', include('auths.urls')),
     path('vehicle/', include('vehicle.urls')),
     path('user/', include('fare.urls')),
+    path('gateway/', include('gateway.urls')),
 ]

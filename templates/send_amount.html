@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gateway</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #272121;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 400px;
+            height: 400px;
+            text-align: center;
+            background: #363232;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+        }
+
+        .title {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .total-amount {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            display: block;
+            width: 90%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+            background-color: #363232;
+            caret-color: white;
+            color: white;
+            margin: auto;
+            margin-bottom: 20px;
+        }
+
+        .input-field:focus {
+            border-color: #127c22;
+        }
+
+        .input-field::placeholder {
+            color: white;
+        }
+
+        .input-field[type="number"]::-webkit-outer-spin-button,
+        .input-field[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .input-field[type="number"] {
+            -moz-appearance: textfield;
+            /* Hide the arrows in Firefox */
+        }
+
+        .send-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #191212;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .send-button:hover {
+            background-color: #127c22;
+        }
+
+        .message {
+
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .success {
+            background: green;
+        }
+
+        .error {
+            background: red;
+        }
+    </style>
+</head>
+
+<body>
+    {% for message in messages %}
+    <p class="message {{message.tags}}">
+        {{message}}
+    </p>
+    {% endfor %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="container">
+            <div class="title">Send Amount</div>
+            <div class="total-amount">Total Amount: NPR <span id='totalAmt'>5000.00</span></div>
+            <input type="text" class="input-field" placeholder="Enter email / phone number" name="email" required />
+            <input type="text" class="input-field" placeholder="Amount to send (NPR)" name="amount" required />
+            <button type="submit" class="send-button">
+                Send Amount
+            </button>
+        </div>
+    </form>
+
+
+
+    <script>
+        document.querySelectorAll(".input-field").forEach((input) => {
+            input.addEventListener("focus", function () {
+                this.dataset.placeholder = this.placeholder;
+                this.placeholder = "";
+            });
+
+            input.addEventListener("blur", function () {
+                this.placeholder = this.dataset.placeholder;
+            });
+        });
+
+
+        document
+            .querySelector("form")
+            .addEventListener("submit", function (event) {
+                let amount = document.querySelector('input[name="amount"]').value;
+                const isAlpha = /^[A-Za-z]+$/.test(amount);
+                if (isAlpha) {
+                    alert("Amount must be a number");
+                    event.preventDefault();
+                }
+
+                const totalAmount = document.querySelector('#totalAmt').innerText;
+                const inputAmount = parseFloat(
+                    document.querySelector('input[name="amount"]').value
+                );
+                if (inputAmount > totalAmount) {
+                    alert("Input amount cannot be greater than total amount");
+                    event.preventDefault();
+                }
+            });
+    </script>
+</body>
+
+</html>
