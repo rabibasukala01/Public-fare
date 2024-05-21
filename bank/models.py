@@ -16,6 +16,7 @@ class Bank(models.Model):
     nagrita_no = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
 
     def generate_unique_account_no(self):
         while True:
@@ -51,3 +52,6 @@ class Bank(models.Model):
 
     def __str__(self):
         return self.fullname + ' - ' + self.phone + ' - ' + str(self.amount) + ' - ' + self.account_number
+
+
+

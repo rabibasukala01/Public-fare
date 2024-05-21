@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gateway</title>
+    <title>Top Up</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -31,8 +31,11 @@
         }
 
         .title {
-            font-size: 28px;
+            font-size: 16px;
             margin-bottom: 20px;
+            text-transform: uppercase;
+            color: #127c22;
+
         }
 
         .total-amount {
@@ -103,6 +106,24 @@
         .error {
             background: red;
         }
+
+        .login {
+
+            margin-top: 20px;
+        }
+
+        .login a {
+            color: #127c22;
+        }
+
+        .logout a {
+            text-decoration: underline;
+            color: #d75656;
+        }
+
+        .logout a:hover {
+            color: red;
+        }
     </style>
 </head>
 
@@ -116,15 +137,32 @@
     <form method="post">
         {% csrf_token %}
         <div class="container">
-            <div class="title">Send Amount</div>
-            <div class="total-amount">Total Amount: NPR <span id='totalAmt'>5000.00</span></div>
+            <div class="title">{{fullname}} </div>
+            <div class="total-amount">Total Amount: NPR <span id='totalAmt'>{{amount}}</span></div>
             <input type="text" class="input-field" placeholder="Enter email / phone number" name="email" required />
             <input type="text" class="input-field" placeholder="Amount to send (NPR)" name="amount" required />
             <button type="submit" class="send-button">
                 Send Amount
             </button>
+
+
+
+            {% if bank_id is None %}
+
+            <div class='login'>
+                <span>To send money ,please click </span><a href="{%url 'bank_login'%}">Login</a>
+            </div>
+            {% else %}
+            <div class='logout'>
+                <p>Account number : <span class='name'>{{account_number}} </span> </p>
+                <p>Phone number : (+977) <span class='name'>{{phone}} </span> </p>
+                <a href="{%url 'bank_logout'%}">Logout</a>
+            </div>
+            {% endif %}
+
         </div>
     </form>
+
 
 
 
