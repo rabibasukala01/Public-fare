@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'auths',
     'fare',
     'vehicle',
-    'gateway',
+    'topup',
+    'bank',
 ]
 
 MIDDLEWARE = [

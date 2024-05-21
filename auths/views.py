@@ -10,6 +10,7 @@ from django.utils import timezone
 from .send_mail import sendmail
 import uuid
 from .models import ForgetTokenManager
+from fare.models import User_amount,User_Transaction_history
 
 @csrf_exempt
 def signup(request):
@@ -49,6 +50,14 @@ def signup(request):
             users.last_name = lname.lower()
             users.last_login =timezone.now()
             users.save()
+
+
+            # initialize user fare table with 0 amount
+            User_amount(user=users).save()
+
+            # initialize user history table
+            User_Transaction_history(user=users).save()
+
             return JsonResponse({'success': 'user created'})
         
         except Exception as e:
