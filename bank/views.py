@@ -67,13 +67,18 @@ def create_bank_account(request):
     return JsonResponse({'error':"only post request is available"})
 
 @csrf_exempt
-def load_with_bank_account(request):
+def load_with_bank_account(request,pk):
     if request.method=='POST':
         account_number = request.POST['account_number']
         password = request.POST['password']
         amount = request.POST['amount']
-        user=request.user
+
+
+        # user=User.objects.get(id=pk)
         # print(user)
+        user=User.objects.get(id=pk)
+        # print(user)
+
         # print(User_amount.objects.get(user=user).amount)
         
         try:
@@ -111,6 +116,7 @@ def load_with_bank_account(request):
                     return JsonResponse({'error':'Password doesnot match'})
             else:
                 return JsonResponse({'error':'No such user exists'})
-        except:
+        except Exception as e:
+            print(e)
             return JsonResponse({'error':'some error occured'})
-    return JsonResponse({'error':"only post request is available"})
+    return render (request,'load_with_bank.html')
