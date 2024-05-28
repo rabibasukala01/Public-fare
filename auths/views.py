@@ -67,11 +67,13 @@ def signup(request):
 
 @csrf_exempt
 def signin(request):
+    
     if request.method == 'POST':
         # data from frontend
         username = request.POST['emailorphone']
         password = request.POST['password']
-        print(password)
+
+        
 
         # authentications:
         user=None
@@ -89,7 +91,7 @@ def signin(request):
     
         if user is not None:
             login(request, user)
-            return JsonResponse({'success': 'success Login'})
+            return JsonResponse({'success': 'success Login','user_id':user.id})
 
         else:
             return JsonResponse({'error':'Cant login try again'})

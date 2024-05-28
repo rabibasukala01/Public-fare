@@ -25,21 +25,27 @@ def user_info(request,pk):
     
     
 def user_history(request,pk):
+    history=[]
     try:
         user=User.objects.get(id=pk)
+        # print(user)
         if user is not None:
-            user_history=User_Transaction_history.objects.get(user=user)
-            context={
-                'transaction_amount':user_history.transaction_amount,
-                  'transaction_datetime':  user_history.transaction_datetime,
-    "pickup_point_latitude":user_history.pickup_point_latitude ,
-    'pickup_point_longitude':user_history.pickup_point_longitude ,
-    "drop_point_latitude":user_history.drop_point_latitude ,
-    'drop_point_longitude':user_history.drop_point_longitude ,
-    'distance_covered':user_history.distance_covered
-            }
+            user_historys=User_Transaction_history.objects.filter(user=user)
+            # print(user_historys)
+            for user_history in user_historys:
+                history.append({
+                    'transaction_amount':user_history.transaction_amount,
+                    'transaction_datetime':  user_history.transaction_datetime,
+                    "pickup_point_latitude":user_history.pickup_point_latitude ,
+                    'pickup_point_longitude':user_history.pickup_point_longitude ,
+                    "drop_point_latitude":user_history.drop_point_latitude ,
+                    'drop_point_longitude':user_history.drop_point_longitude ,
+                    'distance_covered':user_history.distance_covered
+                })
 
-            return JsonResponse(context)
+            return JsonResponse(history,safe=False)
+        return JsonResponse({'error':'No user found'})
 
-    except:
+    except Exception as e:
+        # print(e)
         return JsonResponse({'error':'No user found'})
