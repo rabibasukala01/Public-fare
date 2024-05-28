@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+import json
 
 from django.utils import timezone
 from .send_mail import sendmail
@@ -14,13 +15,15 @@ from fare.models import User_amount,User_Transaction_history
 
 @csrf_exempt
 def signup(request):
+    print(request.body)
     if request.method == 'POST':
-        fname = request.POST['firstname']
-        lname = request.POST['lastname']
-        username = request.POST['number']     #number as username
-        email = request.POST['email'] 
-        password1 = request.POST['password1']
-        password2 = request.POST['password2']
+        data = json.loads(request.body)
+        fname = data.get('firstname')
+        lname = data.get('lastname')
+        username = data.get('number')     #number as username
+        email = data.get('email') 
+        password1 = data.get('password1')
+        password2 = data.get('password2')
 
 
         # Check inputs:
@@ -45,7 +48,7 @@ def signup(request):
             if User.objects.filter(email=email).exists():
                 return JsonResponse({'error': 'email already taken'})  
             
-            users = User.objects.create_user(username,email, password1)
+            users = User.objects.create_user(username=username,email=email, password=password1)
             users.first_name = fname.lower()
             users.last_name = lname.lower()
             users.last_login =timezone.now()
@@ -61,42 +64,26 @@ def signup(request):
             return JsonResponse({'success': 'user created'})
         
         except Exception as e:
-            return JsonResponse({'error': 'Number is already registered'})
+            print(e)
+            return JsonResponse({'error': str(e)})
   
     return JsonResponse({'error': 'only post is available'})
-
 @csrf_exempt
 def signin(request):
-    
+    print(request.body)
     if request.method == 'POST':
-        # data from frontend
-        username = request.POST['emailorphone']
-        password = request.POST['password']
-
-        
-
-        # authentications:
-        user=None
-        if '@' in username:
-            try:
-                user = authenticate(username=User.objects.get(email=username), password=password)
-            except:
-                return JsonResponse("error:Invalid Login from email")
-        else:
-            try:
-                user = authenticate(username=User.objects.get(username=username), password=password)    
-            except:
-                return JsonResponse("error:Invalid Login from number")
-
-    
+        data = json.loads(request.body)
+        username = data.get('emailorphone')  # Use .get() to avoid KeyError
+        password = data.get('password')
+        if not username or not password:
+            return JsonResponse({'error': 'Missing credentials'}, status=400)
+        user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return JsonResponse({'success': 'success Login','user_id':user.id})
-
+            return JsonResponse({'success': 'success Login', 'user_id': user.id})
         else:
-            return JsonResponse({'error':'Cant login try again'})
-            
-    return JsonResponse({'error': 'only post is available'})
+            return JsonResponse({'error': 'Invalid credentials'})
+    return JsonResponse({'error': 'only POST method is available'})
 
 @login_required
 @csrf_exempt
