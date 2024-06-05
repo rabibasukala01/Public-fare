@@ -49,3 +49,25 @@ def user_history(request,pk):
     except Exception as e:
         # print(e)
         return JsonResponse({'error':'No user found'})
+
+
+def scanned(request,number):
+    if request.method=='POST':
+        data=request.body
+        # print(data)
+        try:
+            number=data['nfc_id']
+            gps_id=data['gps_id']
+            lat=data['lat']
+            lng=data['lng']
+            print(number,gps_id,lat,lng)
+            obj=User.objects.get(username=number)
+            print(obj)
+            # TODO : HISTORY
+            # User_Transaction_history.objects.create(user=user,transaction_amount=int(data['amount']),pickup_point_latitude=data['pickup_point_latitude'],pickup_point_longitude=data['pickup_point_longitude'],drop_point_latitude=data['drop_point_latitude'],drop_point_longitude=data['drop_point_longitude'],distance_covered=data['distance_covered'])
+        except:
+            return JsonResponse({'error':'No user found'})
+        return
+
+    return JsonResponse({'message':'Scanned Successfully'})
+    return JsonResponse({'error':'POST ONLY'})

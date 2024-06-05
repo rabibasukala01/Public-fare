@@ -27,6 +27,17 @@ class User_amount(models.Model):
     def __str__(self):
         return self.user.username
 
+class Scanned(models.Model):
+    id=models.AutoField(primary_key=True)
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    gps_id = models.CharField(max_length=100)
+    first_coords=models.CharField(max_length=100,blank=True)
+    second_coords=models.CharField(max_length=100,blank=True)
+    distance_covered=models.FloatField(blank=True)
+    transcation_amount=models.FloatField(default=0.0)
+    scanned_datetime = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.nfc_id
 
 
