@@ -1,7 +1,8 @@
 from django.http import JsonResponse
 from django.contrib.auth.models import User
-from .models import User_amount,User_Transaction_history
-
+from .models import User_amount,User_Transaction_history,Scanned
+from django.views.decorators.csrf import csrf_exempt
+import json
 # Create your views here.
 def user_info(request,pk):
     try:
@@ -51,23 +52,35 @@ def user_history(request,pk):
         return JsonResponse({'error':'No user found'})
 
 
-def scanned(request,number):
+@csrf_exempt
+def scanned(request,mode):
+    print(mode)
     if request.method=='POST':
-        data=request.body
-        # print(data)
-        try:
-            number=data['nfc_id']
-            gps_id=data['gps_id']
-            lat=data['lat']
-            lng=data['lng']
-            print(number,gps_id,lat,lng)
-            obj=User.objects.get(username=number)
-            print(obj)
-            # TODO : HISTORY
-            # User_Transaction_history.objects.create(user=user,transaction_amount=int(data['amount']),pickup_point_latitude=data['pickup_point_latitude'],pickup_point_longitude=data['pickup_point_longitude'],drop_point_latitude=data['drop_point_latitude'],drop_point_longitude=data['drop_point_longitude'],distance_covered=data['distance_covered'])
-        except:
-            return JsonResponse({'error':'No user found'})
-        return
+        data=json.loads(request.body)
+        number=data['nfc_id']
+        gps_id=data['gps_id']
+        lat=data['lat']
+        lng=data['lng']
+        print(data)
 
-    return JsonResponse({'message':'Scanned Successfully'})
+        if mode=='in':
+            print(mode,"hitted")
+            try:
+                user_obj=User.objects.get(username=number)  
+                print(f"{lat},{lng}")
+                # create a scanned object
+                # Scanned.objects.create(user=user_obj,gps_id=gps_id,first_coords=f"{lat},{lng}")
+                
+                return JsonResponse({'success':'User found'})
+            except:
+                return JsonResponse({'error':'No user found'})
+        elif mode=='out':
+            # TODO : HISTORY
+                # User_Transaction_history.objects.create(user=user,transaction_amount=int(data['amount']),pickup_point_latitude=data['pickup_point_latitude'],pickup_point_longitude=data['pickup_point_longitude'],drop_point_latitude=data['drop_point_latitude'],drop_point_longitude=data['drop_point_longitude'],distance_covered=data['distance_covered'])
+            print(mode,"hitted")
+            return JsonResponse({'success':'User found'})
+        else:
+            return JsonResponse({'error':'Invalid url'})
+
+    
     return JsonResponse({'error':'POST ONLY'})
