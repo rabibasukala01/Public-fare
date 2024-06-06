@@ -12,7 +12,7 @@ class Bank(models.Model):
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20,unique=True)
     password=models.CharField(max_length=256)
-    amount = models.FloatField(default=0.0)
+    amount = models.FloatField(default=0.00)
     nagrita_no = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
