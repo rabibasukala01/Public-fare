@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 import json
 from . calculations import distance_duration_calculation
+from . aes_decryption import decrypt_data
 # Create your views here.
 def user_info(request,pk):
     try:
@@ -63,7 +64,14 @@ def scanned(request,mode):
         gps_id=data['gps_id']
         lat=float(data['lat'])
         lng=float(data['lng'])
-        print(data)
+        
+
+        # decrypt the nfc_id
+        try:
+            number=decrypt_data(number)[:10]  #16 bytes, but need only 10 bytes
+            # print(number)
+        except:
+            return JsonResponse({'error':'Invalid NFC ID'})
 
         if mode=='in':
             print('in')
