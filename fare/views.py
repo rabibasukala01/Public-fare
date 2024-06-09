@@ -98,11 +98,8 @@ def scanned(request,mode):
                 scanned_obj.expected_time_to_reach=duration
                 scanned_obj.tracker=True
 
-                # TODO:calculate amount
-                
                 amount=round(CostCalculation().calculate_cost(distance),2)
                 scanned_obj.transcation_amount=amount
-                
                 
                 # update user amount
                 user_amount=User_amount.objects.get(user=user_obj)

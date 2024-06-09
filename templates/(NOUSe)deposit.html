@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bank Deposit</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #272121;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .container {
+        background-color: #363232;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        color: white;
+      }
+
+      h2 {
+        margin-bottom: 20px;
+        color: #333;
+        color: white;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      label {
+        margin-bottom: 5px;
+        color: #555;
+        color: white;
+      }
+
+      input {
+        margin-bottom: 15px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background: #363232;
+        outline: none;
+      }
+
+      button {
+        padding: 10px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      #message {
+        margin-top: 20px;
+        color: #333;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>Bank Deposit</h2>
+    <div class="container">
+      <h2>Bank Deposit</h2>
+      <form id="depositForm">
+        <label for="accountNumber">Account Number:</label>
+        <input type="text" id="accountNumber" name="accountNumber" required />
+
+        <label for="amount">Deposit Amount:</label>
+        <input type="text" id="amount" name="amount" required />
+
+        <button type="submit">Deposit</button>
+      </form>
+      <div id="message"></div>
+    </div>
+    <script>
+      document
+        .getElementById("depositForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent form submission
+
+          const accountNumber = document.getElementById("accountNumber").value;
+          const amount = parseFloat(document.getElementById("amount").value);
+          const messageDiv = document.getElementById("message");
+
+          if (isNaN(amount) || amount <= 0) {
+            messageDiv.textContent = "Please enter a valid deposit amount.";
+            messageDiv.style.color = "red";
+            return;
+          }
+
+          // Simulate a successful deposit
+          messageDiv.textContent = `Successfully deposited $${amount} to account ${accountNumber}.`;
+          messageDiv.style.color = "green";
+
+          // Clear the form
+          document.getElementById("depositForm").reset();
+        });
+    </script>
+  </body>
+</html>

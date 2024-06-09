@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Load with bank</title>
+    <title>Bank Account Create</title>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -46,7 +46,8 @@
 
       input[type="text"],
       input[type="password"],
-      input[type="submit"] {
+      input[type="submit"],
+      input[type="email"] {
         width: 100%;
         padding: 10px;
         margin-bottom: 10px;
@@ -80,20 +81,32 @@
 
   <body>
     <div class="container">
-      <h2>Load with bank</h2>
+      <h2>Create bank account (Staff only)</h2>
       <form method="post">
-        {% csrf_token %}
+        {% comment %} {% csrf_token %} {% endcomment %}
 
-        <label for="accountnumber">Account number:</label>
-        <input type="text" id="" name="account_number" required />
+        <label for="fullname">Fullname:</label>
+        <input type="text" id="" name="fullname" required />
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required />
+        <label for="email">Email:</label>
+        <input type="email" id="" name="email" required />
 
-        <label for="amount">Amount:</label>
-        <input type="number" class="input-field" name="amount" required />
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" name="phone" required />
 
-        <input type="submit" value="Load" />
+        <label for="nagrita_no">Nagrita_no:</label>
+        <input type="text" id="nagrita_no" name="nagrita_no" required />
+
+        <label for="password1">Password:</label>
+        <input type="password" id="password1" name="password1" required />
+
+        <label for="password2">Confirm Password:</label>
+        <input type="password" id="password2" name="password2" required />
+
+        <label for="amount">Amount to deposite:</label>
+        <input type="text" id="" name="amount" required />
+
+        <input type="submit" value="Create" />
       </form>
     </div>
   </body>

@@ -64,7 +64,7 @@ def create_bank_account(request):
             return JsonResponse({'error':'some error occured'})
 
 
-    return JsonResponse({'error':"only post request is available"})
+    return render (request,'create_bank_account.html')
 
 @csrf_exempt
 def load_with_bank_account(request,pk):
