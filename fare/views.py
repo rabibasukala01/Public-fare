@@ -4,7 +4,7 @@ from .models import User_amount,User_Transaction_history,Scanned
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 import json
-from . calculations import distance_duration_calculation
+from . calculations import distance_duration_calculation,CostCalculation
 from . aes_decryption import decrypt_data
 # Create your views here.
 def user_info(request,pk):
@@ -74,10 +74,10 @@ def scanned(request,mode):
             return JsonResponse({'error':'Invalid NFC ID'})
 
         if mode=='in':
-            print('in')
+            
             try:
                 user_obj=User.objects.get(username=number)  
-                print(user_obj)
+                # print(user_obj)
                 # create a scanned object
                 tracker=False
                 Scanned.objects.create(user=user_obj,gps_id=gps_id,first_coords=f"{lng},{lat}",tracker=tracker)
@@ -92,13 +92,15 @@ def scanned(request,mode):
                 scanned_obj=Scanned.objects.filter(user=user_obj,gps_id=gps_id,tracker=False).order_by('-scanned_datetime').first()
                 scanned_obj.second_coords=f"{lng},{lat}"
                 # calculate distance and time
+                # in minute and km
                 duration,distance=distance_duration_calculation(scanned_obj.first_coords,scanned_obj.second_coords)
                 scanned_obj.distance_covered=distance
                 scanned_obj.expected_time_to_reach=duration
                 scanned_obj.tracker=True
 
                 # TODO:calculate amount
-                amount=round(distance*0.1,2)
+                
+                amount=round(CostCalculation().calculate_cost(distance),2)
                 scanned_obj.transcation_amount=amount
                 
                 
