@@ -61,10 +61,11 @@ def user_history(request,pk):
 def scanned(request,mode):
     if request.method=='POST':
         data=json.loads(request.body)
+        print(data)
         number=data['nfc_id']
         gps_id=data['gps_id']   #more like id to identify the gps/bus/driver_account
-        lat=float(data['lat'])
-        lng=float(data['lng'])
+        lat=float(data['Lat'])
+        lng=float(data['Lng'])
         
 
         # decrypt the nfc_id
@@ -148,10 +149,11 @@ def scanned(request,mode):
 def mobile_scanned(request,mode):
     if request.method=='POST':
         data=json.loads(request.body)
+        print(data)
         number=data['nfc_id']
         gps_id=data['gps_id']   #more like id to identify the gps/bus/driver_account
-        lat=float(data['lat'])
-        lng=float(data['lng'])
+        lat=float(data['Lat'])
+        lng=float(data['Lng'])
         
         try:
             receiver=User.objects.get(id=gps_id)
