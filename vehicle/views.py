@@ -5,14 +5,6 @@ from .models import RealTimecoords,GPS_ID
 # Create your views here.
 
 
-# post method testing for esp32
-@csrf_exempt
-def test(request):
-    if request.method == 'POST':
-        print(json.loads(request.body))
-        return JsonResponse({'message':'here is posted data'})
-    return JsonResponse({'message':'GET method is not allowed'})
-
 @csrf_exempt
 def update_coords(request):
     if request.method == 'POST':
