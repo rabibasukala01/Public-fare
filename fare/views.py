@@ -89,7 +89,7 @@ def scanned(request,mode):
                 tracker=False
                 Scanned.objects.create(user=user_obj,gps_id=gps_id,first_coords=f"{lng},{lat}",tracker=tracker)
                 # TODO : RETURN SOMETHING IMP TO CLIENT
-                return JsonResponse({'success':'created 1st scan'})
+                return JsonResponse({'message':'created 1st scan'})
             except:
                 return JsonResponse({'error':'No user found'})
             
@@ -113,7 +113,7 @@ def scanned(request,mode):
                 receiver_amount=User_amount.objects.get(user=receiver)
                 # check if user has enough balance to pay
                 if user_amount.amount<=amount:
-                    return JsonResponse({'error':'Insufficient balance','balance':user_amount.amount})
+                    return JsonResponse({'message':'Insufficient balance','amount':user_amount.amount})
 
                 # logic to pay the amount and receive amount
                 user_amount.amount=round(user_amount.amount-amount,2)
@@ -132,7 +132,7 @@ def scanned(request,mode):
                 receiver_amount.save()
 
                 # TODO : RETURN SOMETHING IMP TO CLIENT
-                return JsonResponse({'success':'paid','amount':amount})
+                return JsonResponse({'message':'Paid','amount':amount})
             except Exception as e:
                 print(e)
                 return JsonResponse({'error':'error occured'})
@@ -169,7 +169,7 @@ def mobile_scanned(request,mode):
                 tracker=False
                 Scanned.objects.create(user=user_obj,gps_id=gps_id,first_coords=f"{lng},{lat}",tracker=tracker)
                 # TODO : RETURN SOMETHING IMP TO CLIENT
-                return JsonResponse({'success':'created 1st scan'})
+                return JsonResponse({'message':'created 1st scan'})
             except:
                 return JsonResponse({'error':'No user found'})
             
@@ -193,7 +193,7 @@ def mobile_scanned(request,mode):
                 receiver_amount=User_amount.objects.get(user=receiver)
                 # check if user has enough balance to pay
                 if user_amount.amount<=amount:
-                    return JsonResponse({'error':'Insufficient balance','balance':user_amount.amount})
+                    return JsonResponse({'message':'Insufficient balance','amount':user_amount.amount})
 
                 # logic to pay the amount and receive amount
                 user_amount.amount=round(user_amount.amount-amount,2)
@@ -212,7 +212,7 @@ def mobile_scanned(request,mode):
                 receiver_amount.save()
 
                 # TODO : RETURN SOMETHING IMP TO CLIENT
-                return JsonResponse({'success':'paid','amount':amount})
+                return JsonResponse({'message':'Paid','amount':amount})
             except Exception as e:
                 print(e)
                 return JsonResponse({'error':'error occured'})
