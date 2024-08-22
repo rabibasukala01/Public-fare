@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 import json
+import re
 
 from django.utils import timezone
 from .send_mail import sendmail
@@ -77,7 +78,10 @@ def signin(request):
         password = data.get('password')
         if not username or not password:
             return JsonResponse({'error': 'Missing credentials'}, status=400)
-        user = authenticate(request, username=username, password=password)
+        if re.match(r'^\d{10}$', username):
+            user = authenticate(request, username=username, password=password)
+        else:
+            user = authenticate(request, email=username, password=password)
         if user is not None:
             login(request, user)
             return JsonResponse({'success': 'success Login', 'user_id': user.id})
