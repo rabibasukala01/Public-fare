@@ -8,7 +8,6 @@ logger = logging.getLogger(__name__)
 # Create your views here.
 
 
-<<<<<<< HEAD
 # post method testing for esp32
 @csrf_exempt
 def test(request):
@@ -19,8 +18,6 @@ def test(request):
 
 
 
-=======
->>>>>>> b16b428e4a465d0a0f7d8f3491d0cebdb9e82e28
 @csrf_exempt
 def update_coords(request):
     if request.method == 'POST':
